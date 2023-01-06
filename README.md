@@ -1,8 +1,13 @@
 # antoncrud
 
-## Project setup
+## Download code base
 ```
-npm install
+git clone https://github.com/Zarikd/antoncrud.git
+```
+
+## Install dependencies
+```
+npm i
 ```
 
 ### Compiles and hot-reloads for development
@@ -14,11 +19,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
