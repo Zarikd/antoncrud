@@ -16,7 +16,7 @@
 
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "AntonCrud",
@@ -41,17 +41,17 @@ export default {
       set(value) {
         this.setUpdatedString(value);
       },
-    }
+    },
   },
   methods: {
     ...mapMutations("antonCrud", [
       "setNewStringEntry",
       "setUpdatedString",
-      "create",
       "startUpdate",
       "update",
       "delete",
     ]),
+    ...mapActions("antonCrud", ["create"]),
 
     localStartUpdate(e) {
       const index = e.target.getAttribute("index");

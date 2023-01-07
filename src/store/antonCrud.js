@@ -1,3 +1,5 @@
+import api from '../api/api'
+
 export default {
     namespaced: true,
     state: () => ({
@@ -32,8 +34,11 @@ export default {
         }
     },
     actions: {
-        async save() {
-            await console.log('here will be function that return promise')
+        async create({commit, state}) {
+            await api.create({
+                stringValue: state.newStringEntry
+            })
+            commit('create')
         }
     },
     getters: {
