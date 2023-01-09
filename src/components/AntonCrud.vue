@@ -3,10 +3,10 @@
     <input v-model="mystring" type="text" />
     <button @click="create">Ok</button>
 
-    <div v-for="(str, key) of stringArray" :key="key">
-      {{ str }}
-      <button @click="localStartUpdate" :index="key">update</button>
-      <button @click="localDelete" :index="key">delete</button>
+    <div v-for="(entry, key) of stringArray" :key="key">
+      {{ entry.stringValue }}
+      <button @click="localStartUpdate" :id="entry._id">update</button>
+      <button @click="localDelete" :id="entry._id">delete</button>
     </div>
 
     <input v-model="localUpdatedString" type="text" />
@@ -20,11 +20,14 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "AntonCrud",
+  mounted() {
+    this.read();
+  },
   computed: {
     ...mapGetters("antonCrud", [
       "stringArray",
       "newStringEntry",
-      "updatedString",
+      "updatedObject",
     ]),
     mystring: {
       get() {
@@ -36,7 +39,7 @@ export default {
     },
     localUpdatedString: {
       get() {
-        return this.updatedString;
+        return this.updatedObject ? this.updatedObject.stringValue : "";
       },
       set(value) {
         this.setUpdatedString(value);
@@ -48,18 +51,16 @@ export default {
       "setNewStringEntry",
       "setUpdatedString",
       "startUpdate",
-      "update",
-      "delete",
     ]),
-    ...mapActions("antonCrud", ["create"]),
+    ...mapActions("antonCrud", ["create", "read", "update", "delete"]),
 
     localStartUpdate(e) {
-      const index = e.target.getAttribute("index");
-      this.startUpdate(index);
+      const id = e.target.getAttribute("id");
+      this.startUpdate(id);
     },
     localDelete(e) {
-      const index = parseInt(e.target.getAttribute("index"));
-      this.delete(index);
+      const id = e.target.getAttribute("id");
+      this.delete(id);
     },
   },
 };

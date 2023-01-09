@@ -5,45 +5,48 @@ export default {
     state: () => ({
         stringArray: [],
         newStringEntry: '',
-        updatedString: '',
-        updatedId: -1,
+        updatedObject: null,
     }),
     mutations: {
         setNewStringEntry: (state, value) => {
             state.newStringEntry = value;
         },
         setUpdatedString: (state, value) => {
-            state.updatedString = value;
+            state.updatedObject.stringValue = value;
         },
-        create: (state) => {
-            state.stringArray.push(state.newStringEntry);
-            state.newStringEntry = '';
+        startUpdate: (state, id) => {
+            state.updatedObject = {...state.stringArray.find((entry) => entry._id === id)};
         },
-        startUpdate: (state, index) => {
-            state.updatedId = parseInt(index);
-            state.updatedString = state.stringArray[state.updatedId];
-        },
-        update: (state) => {
-            state.stringArray = [...state.stringArray];
-            state.stringArray[state.updatedId] = state.updatedString;
-            state.updatedId = -1;
-            state.updatedString = '';
-        },
-        delete: (state, index) => {
-            state.stringArray.splice(index, 1);
+        setData: (state, data) => {
+            state.stringArray = data;
+
         }
     },
     actions: {
-        async create({commit, state}) {
+        async create({ state, dispatch }) {
             await api.create({
                 stringValue: state.newStringEntry
             })
-            commit('create')
-        }
+            dispatch('read')
+        },
+        async read({ commit }) {
+            const array = await api.read();
+            commit('setData', array)
+        },
+        async update({ state, dispatch }) {
+                await api.update(state.updatedObject._id, state.updatedObject)
+            dispatch('read')
+        },
+        async delete({ dispatch }, id) {
+            await api.delete(id)
+        dispatch('read')
+    }
+
     },
     getters: {
         stringArray: (state) => state.stringArray,
         newStringEntry: (state) => state.newStringEntry,
-        updatedString: (state) => state.updatedString,
+        updatedObject: (state) => state.updatedObject,
+
     }
 }
